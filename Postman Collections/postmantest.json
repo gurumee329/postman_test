@@ -6,7 +6,7 @@
 	},
 	"item": [
 		{
-			"name": "로그인",
+			"name": "로그인zzzz",
 			"item": [
 				{
 					"name": "로그인",
@@ -360,12 +360,12 @@
 	],
 	"variable": [
 		{
-			"id": "d688c456-4005-4895-9035-ea923ca11bde",
+			"id": "b69d0b9d-7763-4c8b-a4f5-7a914deed9ef",
 			"key": "fxts_library",
 			"value": ""
 		},
 		{
-			"id": "00937a7c-df2f-4cf4-9d5f-3724b2858385",
+			"id": "a2b05daa-fb99-48a2-8ba1-026f7fee10ef",
 			"key": "dayjs_library",
 			"value": ""
 		}
