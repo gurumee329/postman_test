@@ -1,0 +1,384 @@
+{
+	"info": {
+		"_postman_id": "bc33bcd7-ef99-4151-9663-3b54c2aa4e73",
+		"name": "_COMMON",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "로그인",
+			"item": [
+				{
+					"name": "로그인",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "5deef05b-52c7-4a78-a692-921104efd46c",
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const res = pm.response.json();",
+									"pm.globals.set(\"auth\",res.data.login.token,String);",
+									"",
+									"pm.test(\"Content-Type header is application/json\", () => {",
+									"  pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');",
+									"});",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"_postman_id": "38f969e9-713a-4c70-977b-38c7c9dbf90d",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation Login($loginInput: LoginInput!) {\n  login(loginInput: $loginInput) {\n    needSignUp\n    token\n    user {\n      id\n      __typename\n    }\n    __typename\n  }\n}\n",
+								"variables": "{\n  \"loginInput\": {\n    \"email\": \"{{ID}}\",\n    \"password\": \"{{PW}}\",\n    \"type\": \"ADMIN\"\n  }\n}"
+							},
+							"options": {
+								"graphql": {}
+							}
+						},
+						"url": "{{SAHOST}}"
+					},
+					"response": []
+				}
+			],
+			"_postman_id": "5c3ab6f1-bc17-478f-8259-eab9bb121a89"
+		},
+		{
+			"name": "회원가입",
+			"item": [
+				{
+					"name": "회원가입",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6e4623cb-cd24-46b9-b3a2-c5628e447bbe",
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const res = pm.response.json();",
+									"pm.globals.set(\"auth\",res.data.createUser,true);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"_postman_id": "fd50dd1b-19f3-4803-9e71-72166c83785e",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation CreateUser($input: CreateUserInput!) {\n\tcreateUser(createUserInput: $input)\n}\n",
+								"variables": "{\n\t\"input\": {\n\t\t\"name\": \"밀당 테스트\",\n\t\t\"email\": \"test@ihateflyingbugs.com\",\n\t\t\"birth\": \"2000-01-01\",\n\t\t\"phoneNumber\": \"01012345678\",\n\t\t\"password\": \"mildang123\",\n\t\t\"reEnterPassword\": \"mildang123\",\n\t\t\"kakaoId\": \"kakakak\"\n\t}\n}"
+							},
+							"options": {
+								"graphql": {}
+							}
+						},
+						"url": "{{FEDHOST}}"
+					},
+					"response": []
+				}
+			],
+			"_postman_id": "2da0175d-e965-44b3-9402-df45b12fddd2"
+		},
+		{
+			"name": "import moment",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "095f95a0-c784-4c12-a2ab-95312926163b",
+						"exec": [
+							"var moment = require('moment');",
+							"",
+							"pm.environment.set(\"expiration30Days\", moment(moment().add(30, 'days')).format(\"MM/DD/YYYY HH:mm:ss\"));",
+							"",
+							"console.log(pm.environment.get(\"expiration30Days\"))",
+							"console.log(\"YYYY-MM-DD =\", moment(new Date()).format(\"YYYY-MM-DD\"));",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"_postman_id": "b1d0e9fa-c4e2-4e23-8f05-9322983c5460",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{FEDHOST}}"
+			},
+			"response": []
+		},
+		{
+			"name": "import dayjs",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0cd9e3ed-f33a-4327-8951-7cd3ccb01f10",
+						"exec": [
+							"pm.sendRequest(\"https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.0/dayjs.min.js\", (err, res) => {",
+							"   pm.collectionVariables.set(\"dayjs_library\", res.text());",
+							" ",
+							"   eval(pm.collectionVariables.get(\"dayjs_library\"));",
+							" ",
+							"   let today = new Date();",
+							"   console.log(\"today=\", today);",
+							"   console.log(this.dayjs(today).format())",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"_postman_id": "20607a41-7fff-4b14-9ba1-70996d402dec",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{FEDHOST}}"
+			},
+			"response": []
+		},
+		{
+			"name": "import lodash",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e6417628-a0d7-4f82-8292-de6a9b9570cb",
+						"exec": [
+							"",
+							"",
+							"console.log(_.random(1000))",
+							"console.log(_.random(10, 20))",
+							"",
+							"const test = {",
+							"\t\"data\": {",
+							"\t\t\"studyActivities\": {",
+							"\t\t\t\"nodes\": [",
+							"\t\t\t\t{",
+							"\t\t\t\t\t\"metaContentModule\": {",
+							"\t\t\t\t\t\t\"id\": \"NzkxYTdlNGItMWI5ZS00MWUwLTliMWQtYTU4MzYxMmI0Zjky\",",
+							"\t\t\t\t\t\t\"metaContentModuleTextBookType\": {",
+							"\t\t\t\t\t\t\t\"id\": \"MWY2MThjNTgtZTE5NS00MzNkLTlkZjgtNGFlODNlOTg5YTI5\",",
+							"\t\t\t\t\t\t\t\"pageStart\": 1",
+							"\t\t\t\t\t\t}",
+							"\t\t\t\t\t}",
+							"\t\t\t\t},",
+							"\t\t\t\t{",
+							"\t\t\t\t\t\"metaContentModule\": {",
+							"\t\t\t\t\t\t\"id\": \"ZTdhODA3NWYtOWE4MC00Y2NkLTgxZDAtY2FjNmJmNzUyNzVi\",",
+							"\t\t\t\t\t\t\"metaContentModuleTextBookType\": {",
+							"\t\t\t\t\t\t\t\"id\": \"ODRhNmE3MzAtMjkxZS00Yjc3LTk3MWEtZWQ3NTY1N2YyOTI3\",",
+							"\t\t\t\t\t\t\t\"pageStart\": 1",
+							"\t\t\t\t\t\t}",
+							"\t\t\t\t\t}",
+							"\t\t\t\t},",
+							"\t\t\t\t{",
+							"\t\t\t\t\t\"metaContentModule\": {",
+							"\t\t\t\t\t\t\"id\": \"Mjg2N2M0MGItYWNkNS00NWFkLTk0MTUtNWFjZTFjNjliOWNl\",",
+							"\t\t\t\t\t\t\"metaContentModuleTextBookType\": {",
+							"\t\t\t\t\t\t\t\"id\": \"NjIwNDVmNTktZWM0Zi00ODAxLTk5YWQtZDQxZGZiYTcyOGI1\",",
+							"\t\t\t\t\t\t\t\"pageStart\": 1",
+							"\t\t\t\t\t\t}",
+							"\t\t\t\t\t}",
+							"\t\t\t\t},",
+							"\t\t\t\t{",
+							"\t\t\t\t\t\"metaContentModule\": {",
+							"\t\t\t\t\t\t\"id\": \"ZDI3YWQ3NzYtYjhjNy00Yjc3LTg3ZjQtNzNlOTIxNTA1MmE4\",",
+							"\t\t\t\t\t\t\"metaContentModuleTextBookType\": {",
+							"\t\t\t\t\t\t\t\"id\": \"ZmE0NjFmMjgtZDk2My00ZDY2LTlmMzQtM2I2MTUzOTc2NjY3\",",
+							"\t\t\t\t\t\t\t\"pageStart\": 1",
+							"\t\t\t\t\t\t}",
+							"\t\t\t\t\t}",
+							"\t\t\t\t},",
+							"\t\t\t\t{",
+							"\t\t\t\t\t\"metaContentModule\": {",
+							"\t\t\t\t\t\t\"id\": \"NDA2ZDRhYzUtZjU2Yi00NWMwLTk0MWQtNzI2YTk3NDYxMzhj\",",
+							"\t\t\t\t\t\t\"metaContentModuleTextBookType\": {",
+							"\t\t\t\t\t\t\t\"id\": \"YmY4NWIyZDgtODExYS00NzFkLTlkM2YtZGIwZWQ5NzgwZDBh\",",
+							"\t\t\t\t\t\t\t\"pageStart\": 1",
+							"\t\t\t\t\t\t}",
+							"\t\t\t\t\t}",
+							"\t\t\t\t},",
+							"\t\t\t\t{",
+							"\t\t\t\t\t\"metaContentModule\": {",
+							"\t\t\t\t\t\t\"id\": \"MjczNDhlZWUtNGYxZS00NGIxLWJlMjUtNmE0M2YzZTdiOTZk\",",
+							"\t\t\t\t\t\t\"metaContentModuleTextBookType\": {",
+							"\t\t\t\t\t\t\t\"id\": \"YjM5MjlmMWMtNGVhNy00MDlkLWE5YzYtNGJjZGZhYWFlYWNl\",",
+							"\t\t\t\t\t\t\t\"pageStart\": 1",
+							"\t\t\t\t\t\t}",
+							"\t\t\t\t\t}",
+							"\t\t\t\t},",
+							"\t\t\t\t{",
+							"\t\t\t\t\t\"metaContentModule\": {",
+							"\t\t\t\t\t\t\"id\": \"YWNlMjBkZmYtYTNkZS00OGUzLWI1NDEtY2Y0MzYxNWI2N2M2\",",
+							"\t\t\t\t\t\t\"metaContentModuleTextBookType\": {",
+							"\t\t\t\t\t\t\t\"id\": \"NTc2OGQ3ZTctOGNmNS00OTgyLTk5MDctMWQwN2JkMGIwNDNm\",",
+							"\t\t\t\t\t\t\t\"pageStart\": 1",
+							"\t\t\t\t\t\t}",
+							"\t\t\t\t\t}",
+							"\t\t\t\t},",
+							"\t\t\t\t{",
+							"\t\t\t\t\t\"metaContentModule\": {",
+							"\t\t\t\t\t\t\"id\": \"YjcxOGM3OTgtNTViNC00NmU1LTg3N2EtNmExNzMzMzRmNGRk\",",
+							"\t\t\t\t\t\t\"metaContentModuleTextBookType\": {",
+							"\t\t\t\t\t\t\t\"id\": \"Y2MyOWZjMjYtMmJiNi00YzA0LTk0ZGMtZTIwOWRkYjE2ZDQy\",",
+							"\t\t\t\t\t\t\t\"pageStart\": 1",
+							"\t\t\t\t\t\t}",
+							"\t\t\t\t\t}",
+							"\t\t\t\t},",
+							"\t\t\t\t{",
+							"\t\t\t\t\t\"metaContentModule\": {",
+							"\t\t\t\t\t\t\"id\": \"ZDI4NTRiNDgtN2FhMi00OWNkLWE2MWUtMzc4NGM4ODhiZTZh\",",
+							"\t\t\t\t\t\t\"metaContentModuleTextBookType\": {",
+							"\t\t\t\t\t\t\t\"id\": \"MGY3YTFlNWUtYjYzMC00NjdkLWJhM2MtMmI2ZWRjNGI4YTlm\",",
+							"\t\t\t\t\t\t\t\"pageStart\": 1",
+							"\t\t\t\t\t\t}",
+							"\t\t\t\t\t}",
+							"\t\t\t\t},",
+							"\t\t\t\t{",
+							"\t\t\t\t\t\"metaContentModule\": {",
+							"\t\t\t\t\t\t\"id\": \"YmQyNWM1ZDYtOWViOC00ZTY5LWEwZmEtYjc5ZThjNTM0Mjkz\",",
+							"\t\t\t\t\t\t\"metaContentModuleTextBookType\": {",
+							"\t\t\t\t\t\t\t\"id\": \"MWUzYzYzYzAtMTdmNS00YmQ5LWExYWMtZWFmNGNjMDRkMmYx\",",
+							"\t\t\t\t\t\t\t\"pageStart\": 1",
+							"\t\t\t\t\t\t}",
+							"\t\t\t\t\t}",
+							"\t\t\t\t}",
+							"\t\t\t]",
+							"\t\t},",
+							"\t\t\"metaContentModule\": {",
+							"\t\t\t\"id\": \"MGY4N2IxYTYtZWQyYy00ZWFhLWJlYTYtYTVkOTk0YjkwMjU1\",",
+							"\t\t\t\"metaContentModuleTextBookType\": {",
+							"\t\t\t\t\"id\": \"MjEyZThiMmYtY2VhMS00MjEyLTk0MDctN2EyOTYwMGJiOTVh\",",
+							"\t\t\t\t\"pageStart\": 1",
+							"\t\t\t}",
+							"\t\t}",
+							"\t}",
+							"}",
+							"",
+							"const studyActivities = test.data.studyActivities",
+							"const result = _.map(studyActivities);",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"_postman_id": "334f07b3-d3f3-44f1-8548-b3621fe8eedf",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{FEDHOST}}"
+			},
+			"response": []
+		},
+		{
+			"name": "#DOCS",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "ccd6c41d-2432-497b-aa6e-bc354bf05de6",
+						"exec": [
+							"//POSTMAN API KEY: PMAK-6285a18345c37658919aa67c-d65ea81b3d500f96b1732e97670866c356",
+							"",
+							"// 단축키",
+							"// Command + B : lint + prettier",
+							"",
+							"// Newman",
+							"//https://learning.postman.com/docs/running-collections/using-newman-cli/command-line-integration-with-newman/",
+							"",
+							"// Using external libraries",
+							"// https://learning.postman.com/docs/writing-scripts/script-references/postman-sandbox-api-reference/#using-external-libraries",
+							"",
+							"// Dynamic variables",
+							"// https://learning.postman.com/docs/writing-scripts/script-references/variables-list/",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"_postman_id": "de49fd8d-f2dc-4fd3-9cf8-ae141c8755e8",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "",
+						"variables": ""
+					},
+					"options": {
+						"graphql": {}
+					}
+				},
+				"url": "https://postman-echo.com/get"
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"id": "ec69a0dc-542f-476f-b8f7-4de141f3400d",
+			"key": "fxts_library",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "36b4b906-2339-4071-99dd-e5f5be77f0ad",
+			"key": "dayjs_library",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
